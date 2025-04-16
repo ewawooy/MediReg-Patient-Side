@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Queue Display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="medcss.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <div class="logo-section">
+      <img src="medlog.png" alt="Medireg sample logo" width="236" height="70">
+    </div>
+
+    <div class="main-content">
+      <div class="bell-container" onclick="toggleNotifications()">
+        <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <div class="notification-badge">1</div>
+      </div>
+
+      <div class="notification-popup">
+        <div class="notification-item"></div>
+      </div>
+
+      <h1 class="queue-title">QUEUE NUMBER</h1>
+
+      <div class="queue-card" id="queue-card">
+        <div class = "title" id = title>Dept - Prio/Not - Number</div>
+        <div class="queue-number" id="queue-number">Loading...</div>
+        <div class="timestamp" id="timestamp"></div>
+    </div>
+
+    <button class="view-all-button">VIEW ALL</button>
+  </div>
+
+  <script>
+    const notifications = [
+      "Approximately 5 minutes before your turn",
+      "10 patients ahead of you",
+      "Your estimated wait time is 15 minutes",
+      "3 patients before your turn",
+      "You're next in line!",
+      "Current waiting time: 20 minutes",
+      "7 patients in queue before you",
+      "You're 2 patients away from being seen.",
+      "Estimated wait time: 12 minutes.",
+      "Your turn is coming up shortly.",
+      "Current wait time: 25 minutes.",
+      "Only 5 patients in queue before you.",
+      "Your wait time is approximately 8 minutes.",
+      "Only 1 patient ahead of you!"
+    ];
+
+    function getRandomNotification() {
+      return notifications[Math.floor(Math.random() * notifications.length)];
+    }
+
+    // Generate and update random notification
+    const randomNotification = getRandomNotification();
+    document.querySelector('.notification-item').textContent = randomNotification;
+
+    // Show notification badge
+    document.querySelector('.notification-badge').style.display = 'flex';
+
+    function toggleNotifications() {
+      const popup = document.querySelector('.notification-popup');
+      const badge = document.querySelector('.notification-badge');
+      
+      if (popup.style.display === 'block') {
+        popup.style.display = 'none';
+      } else {
+        popup.style.display = 'block';
+        badge.style.display = 'none'; // Hide badge when notifications are viewed
+      }
+    }
+
+    // Close notifications when clicking outside
+    document.addEventListener('click', function(event) {
+      const bellContainer = document.querySelector('.bell-container');
+      const popup = document.querySelector('.notification-popup');
+      
+      if (!bellContainer.contains(event.target)) {
+        popup.style.display = 'none';
+      }
+    });
+
+    // Retrieve and display queue number and timestamp from local storage
+    window.onload = function() {
+      const queueNumber = localStorage.getItem('queueNumber');
+      const timestamp = localStorage.getItem('timestamp');
+
+      // Display the queue number and timestamp
+      document.getElementById('queue-number').textContent = queueNumber ? queueNumber : 'No Number';
+      document.getElementById('timestamp').textContent = timestamp ? `Generated on: ${timestamp}` : '';
+    };
+  </script>
+</body>
+</html>

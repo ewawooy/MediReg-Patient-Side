@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>MediReg - Patient Information</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="medcss.css" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="container">
+      <div class="form-container">
+        <!-- Logo -->
+        <div class="logo-container">
+          <img
+            class="logo"
+            alt="Medireg sample logo"
+            src="medlog.png"
+          />
+        </div>
+
+        <!-- Patient Information Section -->
+        <h2 class="section-title">PATIENT INFORMATION</h2>
+
+        <div class="input-group">
+          <label for="fName">First Name *</label>
+          <input type="text" id="fName" required />
+          
+          <label for="mName">Middle Name *</label>
+          <input type="text" id="mName" required />
+          
+          <label for="lName">Last Name *</label>
+          <input type="text" id="lName" required />
+          
+          <label for="birthdate">Birthdate *</label>
+          <input type="date" id="birthdate" required />
+          
+          <label for="cNumber">Contact Number *</label>
+          <input type="tel" id="cNumber" required />
+        </div>
+        
+        <!-- Priority Status Section -->
+        <h2 class="section-title">PRIORITY STATUS</h2>
+
+        <div class="radio-group">
+          <div class="radio-item">
+            <input type="radio" id="senior" name="priority" value="senior" checked />
+            <label for="senior">Senior Citizen</label>
+          </div>
+          <div class="radio-item">
+            <input type="radio" id="pwd" name="priority" value="pwd" />
+            <label for="pwd">Person With Disability (PWD)</label>
+          </div>
+          <div class="radio-item">
+            <input type="radio" id="none" name="priority" value="none" />
+            <label for="none">None</label>
+          </div>
+        </div>
+
+        <!-- Department Selection Section -->
+        <h2 class="section-title">DEPARTMENT SELECTION</h2>
+
+        <select id="department" class="department-select">
+          <option value="" disabled selected>Select your Department</option>
+          <option value="cardiology">Cardiology</option>
+          <option value="neurology">Neurology</option>
+          <option value="pediatrics">Pediatrics</option>
+          <option value="orthopedics">Orthopedics</option>
+          <option value="ob-gyn">Obstetrics and Gynecology</option>
+          <option value="oncology">Oncology</option>
+          <option value="hematology">Hematology</option>
+          <option value="pulmonology">Pulmonology</option>
+          <option value="dermatology">Dermatology</option>
+          <option value="radiology">Radiology</option>
+        </select>
+
+        <!-- Generate Button -->
+        <button id="generate-btn" class="generate-button" onclick="generateQueueNumber()">GENERATE</button>
+      </div>
+     
+     <script>
+        function generateQueueNumber() {
+          // Get form values
+          const firstName = document.getElementById('fName').value;
+          const department = document.getElementById('department').value;
+          const priority = document.querySelector('input[name="priority"]:checked').value;
+
+          // Validate form
+          if (!firstName || !department) {
+            alert('Please fill in all required fields and select a department');
+            return;
+          }
+
+          // Generate random number between 1000 and 9999
+          const randomNumber = Math.floor(Math.random() * 9000) + 1000;
+          
+          // Create queue number based on department and priority
+          let prefix = '';
+          switch(department) {
+            case 'cardiology': prefix = 'CR'; break;
+            case 'neurology': prefix = 'NR'; break;
+            case 'pediatrics': prefix = 'PD'; break;
+            case 'orthopedics': prefix = 'OR'; break;
+            case 'ob-gyn': prefix = 'OB-GYN'; break;
+            case 'oncology': prefix = 'ONC'; break;
+            case 'hematology': prefix = 'HEM'; break;
+            case 'pulmonology': prefix = 'PULM'; break;
+            case 'dermatology': prefix = 'DER'; break;
+            case 'radiology': prefix = 'RAD'; break;
+            default: prefix = 'GN'; break;
+          }
+
+          // Add P for priority patients (senior or PWD)
+          if (priority === 'senior' || priority === 'pwd') {
+            prefix += '-P';
+          }
+
+          const queueNumber = `${prefix}-${randomNumber}`;
+
+          // Store the data and redirect
+          localStorage.setItem('queueNumber', queueNumber);
+          localStorage.setItem('timestamp', new Date().toLocaleString());
+          
+          // Redirect to queue number display page
+          window.location.href = 'queueNum.html';
+        }
+      </script>
+    </main>
+  </body>
+</html>
